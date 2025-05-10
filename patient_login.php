@@ -9,12 +9,12 @@ $stmt->bind_param("s", $patient_number);
 $stmt->execute();
 $stmt->store_result();
 
+
 if ($stmt->num_rows > 0) {
     $stmt->bind_result($hashedPassword);
     $stmt->fetch();
     if (password_verify($password, $hashedPassword)) {
         echo "Login successful!";
-        // redirect to dashboard or session init here
     } else {
         echo "Invalid password.";
     }
