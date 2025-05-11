@@ -1,5 +1,6 @@
 <?php
 include 'db.php';
+session_start();
 
 $patient_number = $_POST['patient_number'];
 $password = $_POST['password'];
@@ -7,14 +8,16 @@ $password = $_POST['password'];
 $stmt = $conn->prepare("SELECT password FROM patients WHERE patient_number = ?");
 $stmt->bind_param("s", $patient_number);
 $stmt->execute();
-$stmt->store_result();
+$result = $stmt->get_result();
 
+if ($result->num_rows === 1) {
+    $user = $result->fetch_assoc();
+    if (password_verify($password, $user['password'])) {
+        // Redirect to patient portal after successful login
+        $_SESSION['patient_number'] = $patient_number;
 
-if ($stmt->num_rows > 0) {
-    $stmt->bind_result($hashedPassword);
-    $stmt->fetch();
-    if (password_verify($password, $hashedPassword)) {
-        echo "Login successful!";
+        header("Location: patient_portal.html");
+        exit();  // Don't forget to exit to prevent further code execution
     } else {
         echo "Invalid password.";
     }
