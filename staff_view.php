@@ -2,13 +2,15 @@
 session_start();
 include 'db.php';
 
-// Check if user is logged in and is Support Staff
-if (!isset($_SESSION['employment_no']) || $_SESSION['role'] !== 'Support Staff') {
+// Allow all logged-in staff
+if (!isset($_SESSION['employment_no']) || !isset($_SESSION['role'])) {
     die("Access denied.");
 }
 
-// Handle delete request
-if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['delete_id'])) {
+$is_support_staff = ($_SESSION['role'] === 'Support Staff');
+
+// Handle delete request (only Support Staff)
+if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['delete_id']) && $is_support_staff) {
     $delete_id = intval($_POST['delete_id']);
 
     // Delete from telephones table
@@ -115,7 +117,9 @@ while ($row = $result->fetch_assoc()) {
                 <th>Name</th>
                 <th>Address</th>
                 <th>Role</th>
-                <th>Action</th>
+                <?php if ($is_support_staff): ?>
+                    <th>Action</th>
+                <?php endif; ?>
             </tr>
             <?php foreach ($members as $staff): ?>
                 <tr>
@@ -123,12 +127,14 @@ while ($row = $result->fetch_assoc()) {
                     <td><?= htmlspecialchars($staff['full_name']) ?></td>
                     <td><?= htmlspecialchars($staff['address']) ?></td>
                     <td><?= htmlspecialchars($staff['role']) ?></td>
-                    <td>
-                        <form method="POST" onsubmit="return confirm('Are you sure you want to delete this staff member?');">
-                            <input type="hidden" name="delete_id" value="<?= $staff['id'] ?>">
-                            <input type="submit" class="delete-btn" value="Delete">
-                        </form>
-                    </td>
+                    <?php if ($is_support_staff): ?>
+                        <td>
+                            <form method="POST" onsubmit="return confirm('Are you sure you want to delete this staff member?');">
+                                <input type="hidden" name="delete_id" value="<?= $staff['id'] ?>">
+                                <input type="submit" class="delete-btn" value="Delete">
+                            </form>
+                        </td>
+                    <?php endif; ?>
                 </tr>
             <?php endforeach; ?>
         </table>
@@ -154,7 +160,6 @@ function filterRoles() {
     });
 }
 
-// Show all tables on load
 window.onload = filterRoles;
 </script>
 
