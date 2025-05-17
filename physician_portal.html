@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Medical Dashboard</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      display: flex;
+      height: 100vh;
+    }
+
+    .sidebar {
+      width: 220px;
+      background-color: #2c3e50;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      padding-top: 20px;
+    }
+
+    .sidebar button {
+      background: none;
+      border: none;
+      color: white;
+      padding: 15px 20px;
+      text-align: left;
+      width: 100%;
+      cursor: pointer;
+      transition: background 0.3s;
+      font-size: 16px;
+    }
+
+    .sidebar button:hover {
+      background-color: #34495e;
+    }
+
+    .main-content {
+      flex: 1;
+      padding: 20px;
+      background-color: #ecf0f1;
+    }
+
+    .main-content h2 {
+      margin-top: 0;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="sidebar">
+    <button onclick="showContent('Personal Information')">Personal Information</button>
+    <button onclick="showContent('Scheduling')">Scheduling</button>
+    <button onclick="showContent('Consultations')">Consultations</button>
+    <button onclick="showContent('Surgeries')">Surgeries</button>
+    <button onclick="showContent('Patient Data')">Patient Data</button>
+    <button onclick="showContent('Staff')">Staff</button>
+    <button onclick="showContent('Shifts')">Shifts</button>
+    <button onclick="showContent('Logout')">Logout</button>
+  </div>
+
+  <div class="main-content" id="mainContent">
+    <h2>Welcome</h2>
+    <p>Select a tab from the left to view content.</p>
+  </div>
+
+  <script>
+    function showContent(section) {
+    if (section === 'Personal Information') {
+        document.getElementById('mainContent').innerHTML = `<iframe src="physician_portal.php" style="width:100%; height:90vh; border:none;"></iframe>`;
+    }
+    else if (section === 'Scheduling') {
+    document.getElementById('mainContent').innerHTML = `<iframe src="scheduling.php" style="width:100%; height:90vh; border:none;"></iframe>`;
+    }
+    else if (section === 'Consultations') {
+    document.getElementById('mainContent').innerHTML = `<iframe src="consultation_view.php" style="width:100%; height:90vh; border:none;"></iframe>`;
+    }
+    else if (section === 'Surgeries') {
+    document.getElementById('mainContent').innerHTML = `<iframe src="surgery_view.php" style="width:100%; height:90vh; border:none;"></iframe>`;
+    }
+    else if (section === 'Patient Data') {
+      document.getElementById('mainContent').innerHTML = `<iframe src="patient_view.php" style="width:100%; height:90vh; border:none;"></iframe>`;
+    }
+    else if (section === 'Staff') {
+    document.getElementById('mainContent').innerHTML = `<iframe src="staff_view.php" style="width:100%; height:90vh; border:none;"></iframe>`;
+    }
+    else if (section === 'Shifts') {
+    document.getElementById('mainContent').innerHTML = `<iframe src="shifts_view.php" style="width:100%; height:90vh; border:none;"></iframe>`;
+    }
+    else if (section === 'Logout') {
+        window.location.href = 'logout.php';
+    } else {
+        document.getElementById('mainContent').innerHTML = `<h2>${section}</h2><p>Placeholder content for <strong>${section}</strong>.</p>`;
+    }
+    }
+  </script>
+
+</body>
+</html>

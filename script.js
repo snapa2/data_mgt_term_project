@@ -1,8 +1,11 @@
-document.addEventListener("DOMContentLoaded", () => {
-    const button = document.getElementById("clickMeBtn");
-    
-    button.addEventListener("click", () => {
-      alert("Hello! You clicked the button!");
-    });
-  });
-  
+function validateForm() {
+  const user = document.getElementById("username").value.trim();
+  const pass = document.getElementById("password").value.trim();
+
+  if (!user || !pass) {
+    document.getElementById("error-message").innerText = "All fields are required.";
+    return false;
+  }
+
+  return true;
+}
